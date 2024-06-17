@@ -1,0 +1,27 @@
+.ql-container{
+  width: 95%;
+  margin: 0 auto;
+}
+
+.ql-toolbar{
+  width: 95%;
+  margin: 0 auto;
+}
+
+.col-md-6{
+  margin-bottom: 0.625rem;
+}
+
+.btn{
+  width: 40%;
+  margin: 1.25rem auto;
+}
+
+.form-conteiner{
+  width: 34.375rem;
+  max-width: 100%;
+  padding: 1.5rem;
+  border: solid rgb(216, 216, 216) 0.125rem;
+  border-radius: 5%;
+  margin: 7% auto;
+}
