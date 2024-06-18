@@ -15,10 +15,13 @@
   
   <div class="form-conteiner">
 
-    <form class="row">
+    <form class="row" th:action="@{/salvar}" th:object="${formDto}" method="post" enctype="multipart/form-data">
+
+      <input type="hidden" name="id" th:value="${produto != null} ? ${produto.id} : null" th:field="*{id}">
+
       <div class="col-md-6">
         <label for="nome" class="form-label">Nome do Produto</label>
-        <input type = "text" th:value="${produto != null} ? ${produto.nome} : ''" class="form-control" id="nome" name="nome">
+        <input type = "text" th:value="${produto != null} ? ${produto.nome} : ''" th:field="*{nome}" class="form-control" id="nome" name="nome" >
       </div>
       
       <div class="col-md-6">
@@ -33,25 +36,25 @@
       
       <div class="col-md-6">
         <label for="preco" class="form-label">Preço do Produto</label>
-        <input type="number" th:value="${produto != null} ? ${produto.valor} : ''" class="form-control" id="preco">
+        <input type="number" th:value="${produto != null} ? ${produto.valor} : ''" th:field="*{preco}" class="form-control" id="preco">
       </div>
   
       <div class="col-md-6">
         <label for="quantidade" class="form-label">Quantidade do Produto</label>
-        <input type="number" class="form-control" id="quantidade">
+        <input type="number" th:field="*{quantidade}" class="form-control" id="quantidade">
       </div>
   
       <div class="mb-3">
         <label for="imagem" class="form-label">Imagem do Produto</label>
         <p th:if="${produto} != null" th:text="'atual: ' + ${produto.imagem}" style="color: dodgerblue; font-weight: bold;"></p>
-        <input type="file" class="form-control" id="imagem">
+        <input type="file" th:field="*{imagem}" class="form-control" id="imagem">
       </div>
 
       <label class="form-label">Descrição</label>
       <div id="editor"></div>
-      <input type="hidden" name="descricao">
+      <input type="hidden" th:field="*{descricao}"name="descricao">
 
-      <button type="submit" class="btn btn-primary">enviar</button>
+      <button type="submit" th:onclick="'submitForm()'" class="btn btn-primary">enviar</button>
     </form>
 
   </div>

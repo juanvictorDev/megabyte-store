@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.juanvictordev.megabyte.dto.FormDto;
 import com.juanvictordev.megabyte.entity.Produto;
 import com.juanvictordev.megabyte.repository.ProdutoRepository;
+import com.juanvictordev.megabyte.service.MinioService;
+import com.juanvictordev.megabyte.service.ProdutoService;
 import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 @Controller
@@ -17,9 +20,16 @@ public class ProdutoController {
 
   @Autowired
   ProdutoRepository produtoRepository;
+  
+  @Autowired
+  ProdutoService produtoService;
+  
+  //excluir dps
+  @Autowired
+  MinioService minioService;
 
   @GetMapping(value = {"/criar", "/editar/{id}"})
-  public String form(Model model, @PathVariable(required = false) Long id){
+  public String form(Model model, @ModelAttribute("formDto") FormDto formDto, @PathVariable(required = false) Long id){
       
     if(id == null){
       return "form";
@@ -31,10 +41,23 @@ public class ProdutoController {
   }
 
   @PostMapping("/salvar")
-  public String salvar(@ModelAttribute("formDto") FormDto formDto) {
+  public String salvar(@ModelAttribute("formDto") FormDto formDto) throws Exception {
 
-    
+    if(formDto.id() == null){
+      produtoService.fluxoAdd(formDto);
+    }else{
       
+    }
+
     return null;
   }
+
+  @GetMapping("/test")
+  public String getMethodName(Model model) throws Exception {
+    Produto produto = produtoRepository.findById(2L).get();
+    model.addAttribute("produto", produto);
+    model.addAttribute("descricao", minioService.download(produto.getDescricao()));
+    return "test";
+  }
+  
 }
