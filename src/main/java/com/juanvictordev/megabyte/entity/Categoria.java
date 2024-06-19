@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "categorias")
@@ -36,6 +34,10 @@ public class Categoria {
   //CONSTRUTOR
   public Categoria(String nome) {
     this.nome = nome;
+  }
+
+  public Categoria(Integer id) {
+    this.id = id;
   }
 
 }

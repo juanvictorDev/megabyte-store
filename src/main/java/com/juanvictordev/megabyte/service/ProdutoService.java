@@ -1,6 +1,9 @@
 package com.juanvictordev.megabyte.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,6 +11,7 @@ import com.juanvictordev.megabyte.dto.FormDto;
 import com.juanvictordev.megabyte.entity.Categoria;
 import com.juanvictordev.megabyte.entity.Produto;
 import com.juanvictordev.megabyte.repository.ProdutoRepository;
+
 
 @Service
 public class ProdutoService {
@@ -18,33 +22,45 @@ public class ProdutoService {
   @Autowired
   MinioService minioService;
 
-  public String fluxoAdd(FormDto formDto) throws Exception{
+  public void criarProduto(FormDto formDto){
 
+    //LINKS DA IMAGEM E DESCRICAO
+    String linkImg = formDto.nome().replaceAll("\\s+", "") + "-img";
+    String linkDesc = formDto.nome().replaceAll("\\s+", "") + "-desc";
+
+    //IMAGEM E DESCRICAO
     MultipartFile imagem = formDto.imagem();
-    minioService.upload(
-      imagem.getInputStream(),
-      imagem.getSize(),
-      formDto.nome().replaceAll("\\s+", "") + "-img"
-    );
+    byte[] descricao = formDto.descricao().getBytes();
 
-    String descricao = formDto.descricao();
-    minioService.upload(
-      new ByteArrayInputStream(descricao.getBytes()),
-      descricao.getBytes().length,
-      formDto.nome().replaceAll("\\s+", "") + "-desc"
-    );
-
-    Categoria categoria = new Categoria();
-    categoria.setId(1);
+    //CRIANDO OS INPUT STREAMS DA IMAGEM E DESCRICAO PARA O PARAMETRO
+    //DO METODO UPLOAD PARA SALVAR NO MIN.IO
+    try (
+      InputStream imagemStream = imagem.getInputStream();
+      ByteArrayInputStream descricaoStream = new ByteArrayInputStream(descricao);
+    ){
+      minioService.upload(imagemStream, imagem.getSize(), linkImg);
+      minioService.upload(descricaoStream, descricao.length, linkDesc);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     
-    produtoRepository.save(new Produto(
-      formDto.nome().replaceAll("\\s+", "") + "-img",
-      formDto.nome(),
-      formDto.preco(),
-      categoria,
-      formDto.nome().replaceAll("\\s+", "") + "-desc"
-    ));
+    //CRIANDO UMA LISTA E UM LOOP PARA SALVAR TODA A QUANTIDADE DE
+    //PRODUTOS DE UMA VEZ NO BANCO
+    List<Produto> listaDeProdutos = new ArrayList<>();
+    
+    for (int i = 0; i < formDto.quantidade(); i++) {
+      Produto novoProduto = Produto.builder()
+      .nome(formDto.nome())
+      .valor(formDto.valor())
+      .categoria(new Categoria(formDto.categoria()))
+      .imagem(linkImg)
+      .descricao(linkDesc)
+      .build();
 
-    return null;
+      listaDeProdutos.add(novoProduto);
+    }
+    
+    produtoRepository.saveAll(listaDeProdutos);
   }
+
 }

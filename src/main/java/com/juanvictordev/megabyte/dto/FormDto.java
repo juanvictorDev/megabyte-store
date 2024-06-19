@@ -5,9 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 public record FormDto(
   Long id, 
   String nome, 
-  String categoria, 
+  Integer categoria, 
   Integer quantidade,
-  Double preco, 
+  Double valor, 
   MultipartFile imagem, 
   String descricao
 ) {}

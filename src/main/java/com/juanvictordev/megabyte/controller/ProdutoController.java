@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.juanvictordev.megabyte.dto.FormDto;
 import com.juanvictordev.megabyte.entity.Produto;
+import com.juanvictordev.megabyte.repository.CategoriaRepository;
 import com.juanvictordev.megabyte.repository.ProdutoRepository;
 import com.juanvictordev.megabyte.service.MinioService;
 import com.juanvictordev.megabyte.service.ProdutoService;
@@ -28,9 +29,14 @@ public class ProdutoController {
   @Autowired
   MinioService minioService;
 
+  @Autowired
+  CategoriaRepository categoriaRepository;
+
   @GetMapping(value = {"/criar", "/editar/{id}"})
   public String form(Model model, @ModelAttribute("formDto") FormDto formDto, @PathVariable(required = false) Long id){
-      
+    
+    model.addAttribute("categorias", categoriaRepository.findAll());
+
     if(id == null){
       return "form";
     }else{
@@ -41,10 +47,10 @@ public class ProdutoController {
   }
 
   @PostMapping("/salvar")
-  public String salvar(@ModelAttribute("formDto") FormDto formDto) throws Exception {
+  public String salvar(@ModelAttribute("formDto") FormDto formDto){
 
     if(formDto.id() == null){
-      produtoService.fluxoAdd(formDto);
+      produtoService.criarProduto(formDto);
     }else{
       
     }

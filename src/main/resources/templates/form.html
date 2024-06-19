@@ -17,26 +17,24 @@
 
     <form class="row" th:action="@{/salvar}" th:object="${formDto}" method="post" enctype="multipart/form-data">
 
-      <input type="hidden" name="id" th:value="${produto != null} ? ${produto.id} : null" th:field="*{id}">
+      <input type="hidden" th:field="*{id}">
 
       <div class="col-md-6">
         <label for="nome" class="form-label">Nome do Produto</label>
-        <input type = "text" th:value="${produto != null} ? ${produto.nome} : ''" th:field="*{nome}" class="form-control" id="nome" name="nome" >
+        <input type = "text" th:value="${produto != null} ? ${produto.nome} : null"  class="form-control" id="nome" name="nome" >
       </div>
       
       <div class="col-md-6">
         <label for="select" class="form-label">Categoria do Produto</label>
-        <select class="form-select" id="select">
-          <option selected>...</option>
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
+        <select class="form-select" id="select" th:field="*{categoria}">
+          <option selected value="">...</option>
+          <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}"></option>
         </select>
       </div>
       
       <div class="col-md-6">
-        <label for="preco" class="form-label">Preço do Produto</label>
-        <input type="number" th:value="${produto != null} ? ${produto.valor} : ''" th:field="*{preco}" class="form-control" id="preco">
+        <label for="valor" class="form-label">Valor do Produto</label>
+        <input type="number" th:value="${produto != null} ? ${produto.valor} : ''" th:field="*{valor}" class="form-control" id="preco">
       </div>
   
       <div class="col-md-6">
@@ -74,8 +72,7 @@
         ['blockquote', 'code-block'],
         ['link', 'image', 'formula'],
         [{ list: 'ordered' }, { list: 'bullet' }, {list: 'check'}],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],
-        [{ 'align': [] }]
+        [{ 'align': [] }, { 'indent': '-1'}, { 'indent': '+1' }]
       ],
       imageResize: {
         displayStyles: {
