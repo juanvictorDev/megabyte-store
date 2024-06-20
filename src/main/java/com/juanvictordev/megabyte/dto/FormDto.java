@@ -2,7 +2,7 @@ package com.juanvictordev.megabyte.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public record FormDto(
+public record FormDTO(
   Long id, 
   String nome, 
   Integer categoria, 

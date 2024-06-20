@@ -16,40 +16,47 @@
   <div class="form-conteiner">
 
     <form class="row" th:action="@{/salvar}" method="post" enctype="multipart/form-data">
-
+      
+      <!-- ID -->
       <input type="hidden" name="id" th:value="${produto != null} ? ${produto.id} : null">
-
+      
+      <!-- NOME -->
       <div class="col-md-6">
         <label for="nome" class="form-label">Nome do Produto</label>
         <input type = "text" id="nome" name="nome" th:value="${produto != null} ? ${produto.nome} : null"  class="form-control">
       </div>
       
+      <!-- CATEGORIA  -->
       <div class="col-md-6">
         <label for="categoria" class="form-label">Categoria do Produto</label>
         <select  id="categoria" name="categoria" class="form-select">
-          <option selected value="">...</option>
-          <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}"></option>
+          <option value="">...</option>
+          <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}" th:selected="${categoria.id} == ${produto.id_categoria}"></option>
         </select>
       </div>
       
+      <!-- VALOR  -->
       <div class="col-md-6">
         <label for="valor" class="form-label">Valor do Produto</label>
         <input type="number" id="valor" name="valor" th:value="${produto != null} ? ${produto.valor} : null" class="form-control">
       </div>
-  
+      
+      <!-- QUANTIDADE  -->
       <div class="col-md-6">
         <label for="quantidade" class="form-label">Quantidade do Produto</label>
-        <input type="number" name="quantidade" id="quantidade" class="form-control">
+        <input type="number" name="quantidade" id="quantidade" th:value="${produto != null} ? ${produto.quantidade} : null" class="form-control">
       </div>
-  
+      
+      <!-- IMAGEM  -->
       <div class="mb-3">
         <label for="imagem" class="form-label">Imagem do Produto</label>
         <p th:if="${produto} != null" th:text="'atual: ' + ${produto.imagem}" style="color: dodgerblue; font-weight: bold;"></p>
         <input type="file" name="imagem" id="imagem" class="form-control">
       </div>
 
+      <!-- DESCRICAO  -->
       <label class="form-label">Descrição</label>
-      <div id="editor"></div>
+      <div id="editor" th:utext="${descricao}"></div>
       <input type="hidden" name="descricao">
 
       <button type="submit" th:onclick="'submitForm()'" class="btn btn-primary">enviar</button>

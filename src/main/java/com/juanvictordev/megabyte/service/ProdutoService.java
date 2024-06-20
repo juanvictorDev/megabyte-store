@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.juanvictordev.megabyte.dto.FormDto;
+import com.juanvictordev.megabyte.dto.FormDTO;
 import com.juanvictordev.megabyte.entity.Categoria;
 import com.juanvictordev.megabyte.entity.Produto;
 import com.juanvictordev.megabyte.repository.ProdutoRepository;
@@ -21,8 +21,8 @@ public class ProdutoService {
 
   @Autowired
   MinioService minioService;
-
-  public void criarProduto(FormDto formDto){
+  //METODO PARA CRIAR PRODUTO
+  public void criarProduto(FormDTO formDto){
 
     //LINKS DA IMAGEM E DESCRICAO
     String linkImg = formDto.nome().replaceAll("\\s+", "") + "-img";
@@ -62,5 +62,8 @@ public class ProdutoService {
     
     produtoRepository.saveAll(listaDeProdutos);
   }
+
+
+
 
 }

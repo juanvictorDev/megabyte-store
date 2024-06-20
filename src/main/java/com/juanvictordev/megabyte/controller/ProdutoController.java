@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import com.juanvictordev.megabyte.dto.FormDto;
+
+import com.juanvictordev.megabyte.dto.EditFormDTO;
+import com.juanvictordev.megabyte.dto.FormDTO;
 import com.juanvictordev.megabyte.entity.Produto;
 import com.juanvictordev.megabyte.repository.CategoriaRepository;
 import com.juanvictordev.megabyte.repository.ProdutoRepository;
@@ -34,19 +35,25 @@ public class ProdutoController {
   @GetMapping(value = {"/criar", "/editar/{id}"})
   public String form(Model model, @PathVariable(required = false) Long id){
     model.addAttribute("categorias", categoriaRepository.findAll());
-
+    
     if(id == null){
       return "form";
     }else{
-      Produto produto = produtoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+      EditFormDTO produto = produtoRepository.findByIdWithCount(id)
+      .orElseThrow(() -> new IllegalArgumentException());
+      
+      String descricao = minioService.download(produto.getDescricao());
+      
       model.addAttribute("produto", produto);
+      model.addAttribute("descricao", descricao);
+      
       return "form";   
     }
   }
 
 
   @PostMapping("/salvar")
-  public String salvar(FormDto formDto){
+  public String salvar(FormDTO formDto){
 
     if(formDto.id() == null){
       produtoService.criarProduto(formDto);
@@ -59,7 +66,7 @@ public class ProdutoController {
 
   @GetMapping("/test")
   public String getMethodName(Model model) throws Exception {
-    Produto produto = produtoRepository.findById(2L).get();
+    Produto produto = produtoRepository.findById(30L).get();
     model.addAttribute("produto", produto);
     model.addAttribute("descricao", minioService.download(produto.getDescricao()));
     return "test";

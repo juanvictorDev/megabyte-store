@@ -4,14 +4,12 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import org.springframework.stereotype.Service;
 import io.minio.GetObjectArgs;
-import io.minio.GetObjectResponse;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 
 
 @Service
 public class MinioService {
-
 
   //--usar variavel de ambiente pra setar as coisas
   private MinioClient getMinioClient(){
@@ -34,18 +32,25 @@ public class MinioService {
       .stream(input, objectSize, -1)
       .build());
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new RuntimeException("Erro ao fazer upload do objeto", e);
     }
   }
 
-  public String download(String desc) throws Exception{
-    GetObjectResponse obj = getMinioClient().getObject(GetObjectArgs
-    .builder()
-    .bucket("repository")
-    .object(desc)
-    .build());
+  //METODO PARA DOWNLOAD DA DESCRICAO DO PRODUTO
+  public String download(String descricao) {
+    try (
+      InputStream obj = getMinioClient().getObject(GetObjectArgs
+      .builder()
+      .bucket("repository")
+      .object(descricao)
+      .build())
+    ) {
 
-    return new String(obj.readAllBytes());
+      byte[] objByte = obj.readAllBytes();
+      return new String(objByte);
+
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao baixar a descrição do produto", e);
+    }
   }
-
 }
