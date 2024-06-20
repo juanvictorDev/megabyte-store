@@ -15,7 +15,6 @@ import com.juanvictordev.megabyte.service.ProdutoService;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
-
 @Controller
 public class ProdutoController {
 
@@ -33,8 +32,7 @@ public class ProdutoController {
   CategoriaRepository categoriaRepository;
 
   @GetMapping(value = {"/criar", "/editar/{id}"})
-  public String form(Model model, @ModelAttribute("formDto") FormDto formDto, @PathVariable(required = false) Long id){
-    
+  public String form(Model model, @PathVariable(required = false) Long id){
     model.addAttribute("categorias", categoriaRepository.findAll());
 
     if(id == null){
@@ -46,17 +44,18 @@ public class ProdutoController {
     }
   }
 
+
   @PostMapping("/salvar")
-  public String salvar(@ModelAttribute("formDto") FormDto formDto){
+  public String salvar(FormDto formDto){
 
     if(formDto.id() == null){
       produtoService.criarProduto(formDto);
     }else{
       
     }
-
     return null;
   }
+
 
   @GetMapping("/test")
   public String getMethodName(Model model) throws Exception {
