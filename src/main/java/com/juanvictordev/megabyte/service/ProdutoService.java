@@ -34,8 +34,6 @@ public class ProdutoService {
 
     //METODO UTILITARIO PARA ENVIAR O PADRAO DE DADOS PARA O MIN.IO E RETORNAR OS LINKS
     //  ve a questão do input hiddem lá no form
-    //**************** explicar a logica dps ******************************
-    //
     Map<String, String> links = enviarPadraoMinio(form, null);
     
     //CRIANDO UMA LISTA E UM LOOP PARA SALVAR TODA A QUANTIDADE DE
@@ -107,31 +105,39 @@ public class ProdutoService {
 
   //METODOS UTILITARIOS 
   
-  //METODO PARA PADRONIZAR OS DADOS E ENVIAR PARA O UPLOAD DO MIN.IO
+  //METODO PARA PADRONIZAR OS DADOS E ENVIAR PARA O UPLOAD DO MIN.IO E RETORNAR OS LINKS
+  //POSSUI O FLUXO DE CRIACAO, QUANDO NAO EH PASSADO O PRODUTO ORIGINAL DO BANCO
+  //POSSUI FLUXO DE EDICAO QUANDO EH PASSADO O PRODUTO ORIGINAL DO BANCO
   private Map<String, String> enviarPadraoMinio(FormDTO form, ProdutoDTO produtoOriginal){
     
-    //ve oq fazer dps imagem diferente
+    //EDICAO DE PRODUTO COM NOVA IMAGEM
     if(form.id() != null && !form.imagem().isEmpty()){
       System.out.println("METODO COM IMAGEM NOVA");
-      //METODO PARA DELETAR OS OBJETOS QUE SERAO SUBSTITUIDOS NO MIN.IO
+      //METODO PARA DELETAR OS OBJETOS QUE SERAO SUBSTITUIDOS PELOS NOVOS NO MIN.IO
+      //SE O PRODUTO FOR ENVIADO COM NOVO NOME, NO MIN.IO VAI EXISTIR 2, O ANTIGO E O NOVO
+      //POR ISSO EXCLUIR TUDO ANTES, PRA GARANTIR A INTEGRIDADE, PQ SE FOR O MSM NOME
+      //O MIN.IO VAI FAZER O REPLACE, MAS SE FOR NOME DIFERENTE NAO 
       minioService.deleteDados(produtoOriginal.getImagem(), produtoOriginal.getDescricao());
     }
 
-    //LINKS DA IMAGEM E DESCRICAO
+    //PADRAO DE LINKS DA IMAGEM E DESCRICAO
     String linkImg = form.nome().replaceAll("\\s+", "") + "-img";
     String linkDesc = form.nome().replaceAll("\\s+", "") + "-desc";
 
-    //msm imagem
+    //EDICAO DE PRODUTO COM A MSM IMAGEM
     if(form.id() != null && form.imagem().isEmpty()){
       System.out.println("METODO COM A MESMA IMAGEM");
       
-      
-      minioService.renameObject(produtoOriginal.getImagem(), linkImg);
-      minioService.deleteDados(produtoOriginal.getImagem(), produtoOriginal.getDescricao());
-      
-
+      //QUANDO ALTERA O NOME DO PRODUTO
+      if(!form.nome().equals(produtoOriginal.getNome())){
+        minioService.renameObject(produtoOriginal.getImagem(), linkImg);
+        minioService.deleteDados(produtoOriginal.getImagem(), produtoOriginal.getDescricao());
+      }
+      //DESCRICAO SEMPRE EH CRIADA NOVAMENTE E COM O PADRAO DE NOME
+      //PARA GARANTIR A INTEGRIDADE DO BANCO E MIN.IO
       byte[] descricao = form.descricao().getBytes();
       
+      //FAZENDO O UPLOAD DA DESCRICAO NO MIN.IO
       try (
         ByteArrayInputStream descricaoStream = new ByteArrayInputStream(descricao);
       ){
@@ -139,7 +145,7 @@ public class ProdutoService {
       } catch (Exception e) {
         e.printStackTrace();
       }
-
+      
       return Map.of("imagem", linkImg, "descricao", linkDesc);
     }
 
