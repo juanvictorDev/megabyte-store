@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
@@ -44,7 +43,7 @@ public class MinioService {
   }
 
   //METODO PARA DOWNLOAD DA DESCRICAO DO PRODUTO NO MIN.IO
-  public String download(String descricao) {
+  public String downloadDescricao(String descricao) {
     try (
       InputStream obj = getMinioClient().getObject(GetObjectArgs
       .builder()
@@ -62,19 +61,31 @@ public class MinioService {
   }
 
   //METODO PARA DELETAR IMAGEM E DESCRICAO NO MIN.IO
-  public void delete(String objImagem, String objDescricao){
+  public void deleteDados(String objImagem, String objDescricao){
+    
     List<DeleteObject> objects = new LinkedList<>();
     objects.add(new DeleteObject(objImagem));
     objects.add(new DeleteObject(objDescricao));
 
     try {
-      getMinioClient().removeObjects(RemoveObjectsArgs
+      Iterable<Result<DeleteError>> results = getMinioClient().removeObjects(RemoveObjectsArgs
       .builder()
       .bucket("repository")
       .objects(objects)
       .build());
+
+      for (Result<DeleteError> result : results) {
+        try {
+          DeleteError error = result.get();
+          System.err.println("Erro ao deletar: " + error.objectName() + " - " + error.message());
+        } catch (Exception e) {
+          System.err.println("Exception enquanto estava recebendo o delete error: " + e.getMessage());
+        }
+      }
+
     } catch (Exception e) {
       throw new RuntimeException("Erro ao deletar objeto", e);
     }
- }
+  }
+  
 }

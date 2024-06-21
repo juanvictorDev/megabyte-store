@@ -5,12 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import com.juanvictordev.megabyte.dto.EditFormDTO;
 import com.juanvictordev.megabyte.dto.FormDTO;
-import com.juanvictordev.megabyte.entity.Produto;
-import com.juanvictordev.megabyte.repository.CategoriaRepository;
-import com.juanvictordev.megabyte.repository.ProdutoRepository;
 import com.juanvictordev.megabyte.service.MinioService;
 import com.juanvictordev.megabyte.service.ProdutoService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,57 +15,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ProdutoController {
 
   @Autowired
-  ProdutoRepository produtoRepository;
-  
-  @Autowired
   ProdutoService produtoService;
   
-  //excluir dps
   @Autowired
   MinioService minioService;
 
-  @Autowired
-  CategoriaRepository categoriaRepository;
 
   @GetMapping(value = {"/criar", "/editar/{id}"})
-  public String form(Model model, @PathVariable(required = false) Long id){
-    model.addAttribute("categorias", categoriaRepository.findAll());
+  public String formulario(Model model, @PathVariable(required = false) Long id){
+
+    model.addAllAttributes(produtoService.dadosParaFormulario(id));
     
-    if(id == null){
-      return "form";
-    }else{
-      EditFormDTO produto = produtoRepository.findByIdWithCount(id)
-      .orElseThrow(() -> new IllegalArgumentException());
-      
-      String descricao = minioService.download(produto.getDescricao());
-      
-      model.addAttribute("produto", produto);
-      model.addAttribute("descricao", descricao);
-      
-      return "form";   
-    }
+    return "form";
   }
 
 
   @PostMapping("/salvar")
-  public String salvar(FormDTO formDto){
-
-    if(formDto.id() == null){
-      produtoService.criarProduto(formDto);
+  public String salvar(FormDTO form){
+  
+    if(form.id() == null){
+      produtoService.criarProduto(form);
     }else{
-      produtoService.editarProduto(formDto);
+      produtoService.editarProduto(form);
     }
 
     return "home";
   }
 
 
-  @GetMapping("/test")
-  public String getMethodName(Model model) throws Exception {
-    Produto produto = produtoRepository.findById(30L).get();
-    model.addAttribute("produto", produto);
-    model.addAttribute("descricao", minioService.download(produto.getDescricao()));
-    return "test";
-  }
+  // @GetMapping("/test")
+  // public String getMethodName(Model model) throws Exception {
+  //   Produto produto = produtoRepository.findById(30L).get();
+  //   model.addAttribute("produto", produto);
+  //   model.addAttribute("descricao", minioService.download(produto.getDescricao()));
+  //   return "test";
+  // }
   
 }

@@ -18,10 +18,14 @@
 }
 
 .form-conteiner{
-  width: 34.375rem;
+  width: 36rem;
   max-width: 100%;
   padding: 1.5rem;
   border: solid rgb(216, 216, 216) 0.125rem;
   border-radius: 5%;
   margin: 7% auto;
+}
+
+label{
+  font-weight: bold;
 }

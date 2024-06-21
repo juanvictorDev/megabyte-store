@@ -54,7 +54,8 @@
       <!-- IMAGEM  -->
       <div class="mb-3">
         <label for="imagem" class="form-label">Imagem do Produto</label>
-        <p th:if="${produto} != null" th:text="'atual: ' + ${produto.imagem}" style="color: dodgerblue; font-weight: bold;"></p>
+        <img th:if="${produto} != null" th:src="@{'http://localhost:9000/repository/' + ${produto.imagem}}" height="100px" style="display: block;" alt="imagem atual">
+        <p th:if="${produto} != null" th:text="'atual: ' + ${produto.imagem}" style="color: dodgerblue;"></p>
         <input type="file" name="imagem" id="imagem" class="form-control">
       </div>
 

@@ -3,15 +3,17 @@ package com.juanvictordev.megabyte.service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.juanvictordev.megabyte.dto.EditFormDTO;
+import com.juanvictordev.megabyte.dto.ProdutoDTO;
 import com.juanvictordev.megabyte.dto.FormDTO;
 import com.juanvictordev.megabyte.entity.Categoria;
 import com.juanvictordev.megabyte.entity.Produto;
+import com.juanvictordev.megabyte.repository.CategoriaRepository;
 import com.juanvictordev.megabyte.repository.ProdutoRepository;
 
 
@@ -20,6 +22,9 @@ public class ProdutoService {
   
   @Autowired
   ProdutoRepository produtoRepository;
+
+  @Autowired
+  CategoriaRepository categoriaRepository;
 
   @Autowired
   MinioService minioService;
@@ -54,11 +59,11 @@ public class ProdutoService {
   public void editarProduto(FormDTO form){
     
     //BUSCANDO PRODUTO ORIGINAL DO BANCO
-    EditFormDTO produtoOriginal = produtoRepository.findByIdWithCount(form.id())
+    ProdutoDTO produtoOriginal = produtoRepository.findByIdWithCount(form.id())
     .orElseThrow(() -> new IllegalArgumentException());
 
     //METODO PARA DELETAR OS OBJETOS QUE SERAO SUBSTITUIDOS NO MIN.IO
-    minioService.delete(produtoOriginal.getImagem(), produtoOriginal.getDescricao());
+    minioService.deleteDados(produtoOriginal.getImagem(), produtoOriginal.getDescricao());
 
     //METODO UTILITARIO PARA ENVIAR O PADRAO DE DADOS PARA O MIN.IO E RETORNAR OS LINKS
     Map<String, String> links = enviarPadraoMinio(form);
@@ -100,7 +105,9 @@ public class ProdutoService {
   } 
 
 
-  //METODO UTILITARIO PARA PADRONIZAR OS DADOS E ENVIAR PARA O UPLOAD DO MIN.IO
+  //METODOS UTILITARIOS 
+  
+  //METODO PARA PADRONIZAR OS DADOS E ENVIAR PARA O UPLOAD DO MIN.IO
   private Map<String, String> enviarPadraoMinio(FormDTO form){
     
     //LINKS DA IMAGEM E DESCRICAO
@@ -126,4 +133,24 @@ public class ProdutoService {
     //RETORNANDO OS NOMES DOS OBJETOS DO MIN.IO PARA INSERIR NO BANCO
     return Map.of("imagem", linkImg, "descricao", linkDesc);
   }
+
+  //METODO PARA ENVIAR OS DADOS NECESSARIOS PARA O FORMULARIO DE CRIACAO E EDICAO
+  public Map<String, Object> dadosParaFormulario(Long id){
+    Map<String, Object> dados = new HashMap<>();
+    
+    dados.put("categorias", categoriaRepository.findAll());
+    
+    if(id != null){
+      ProdutoDTO produto = produtoRepository.findByIdWithCount(id)
+      .orElseThrow(() -> new IllegalArgumentException());
+      
+      String descricao = minioService.downloadDescricao(produto.getDescricao());
+      
+      dados.put("produto", produto);
+      dados.put("descricao", descricao);  
+    }
+
+    return dados;
+  }
+
 }

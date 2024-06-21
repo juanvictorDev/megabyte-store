@@ -1,6 +1,6 @@
 package com.juanvictordev.megabyte.dto;
 
-public interface EditFormDTO {
+public interface ProdutoDTO {
   Long getId();
   String getNome();
   Integer getId_categoria();
