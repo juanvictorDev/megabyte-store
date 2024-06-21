@@ -2,10 +2,17 @@ package com.juanvictordev.megabyte.service;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectsArgs;
+import io.minio.Result;
+import io.minio.messages.DeleteError;
+import io.minio.messages.DeleteObject;
 
 
 @Service
@@ -36,7 +43,7 @@ public class MinioService {
     }
   }
 
-  //METODO PARA DOWNLOAD DA DESCRICAO DO PRODUTO
+  //METODO PARA DOWNLOAD DA DESCRICAO DO PRODUTO NO MIN.IO
   public String download(String descricao) {
     try (
       InputStream obj = getMinioClient().getObject(GetObjectArgs
@@ -53,4 +60,21 @@ public class MinioService {
       throw new RuntimeException("Erro ao baixar a descrição do produto", e);
     }
   }
+
+  //METODO PARA DELETAR IMAGEM E DESCRICAO NO MIN.IO
+  public void delete(String objImagem, String objDescricao){
+    List<DeleteObject> objects = new LinkedList<>();
+    objects.add(new DeleteObject(objImagem));
+    objects.add(new DeleteObject(objDescricao));
+
+    try {
+      getMinioClient().removeObjects(RemoveObjectsArgs
+      .builder()
+      .bucket("repository")
+      .objects(objects)
+      .build());
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao deletar objeto", e);
+    }
+ }
 }

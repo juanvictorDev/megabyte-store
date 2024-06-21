@@ -58,9 +58,10 @@ public class ProdutoController {
     if(formDto.id() == null){
       produtoService.criarProduto(formDto);
     }else{
-      
+      produtoService.editarProduto(formDto);
     }
-    return null;
+
+    return "home";
   }
 
 

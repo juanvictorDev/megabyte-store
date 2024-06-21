@@ -31,7 +31,11 @@
         <label for="categoria" class="form-label">Categoria do Produto</label>
         <select  id="categoria" name="categoria" class="form-select">
           <option value="">...</option>
-          <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}" th:selected="${categoria.id} == ${produto.id_categoria}"></option>
+          <option th:each="categoria : ${categorias}" 
+                  th:value="${categoria.id}" 
+                  th:text="${categoria.nome}" 
+                  th:selected="${produto != null} and ${categoria.id} == ${produto.id_categoria}">
+          </option>
         </select>
       </div>
       
