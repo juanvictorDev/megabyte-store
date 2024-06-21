@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import io.minio.CopyObjectArgs;
+import io.minio.CopySource;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -41,6 +43,26 @@ public class MinioService {
       throw new RuntimeException("Erro ao fazer upload do objeto", e);
     }
   }
+
+
+  //METODO PARA RENOMEAR OBJETO COPIAR O OBJETO PARA UM COM NOVO NOME
+  public void renameObject(String objetoNome, String novoObjetoNome) {
+    MinioClient minioClient = getMinioClient();
+    try {
+      minioClient.copyObject(CopyObjectArgs.builder()
+      .bucket("repository")
+      .object(novoObjetoNome)
+      .source(CopySource.builder()
+        .bucket("repository")
+        .object(objetoNome)
+        .build())
+      .build());
+      
+    } catch (Exception e) {
+      throw new RuntimeException("Erro ao renomear o objeto", e);
+    }
+  }
+
 
   //METODO PARA DOWNLOAD DA DESCRICAO DO PRODUTO NO MIN.IO
   public String downloadDescricao(String descricao) {
