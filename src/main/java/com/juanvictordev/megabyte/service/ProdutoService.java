@@ -112,7 +112,6 @@ public class ProdutoService {
     
     //EDICAO DE PRODUTO COM NOVA IMAGEM
     if(form.id() != null && !form.imagem().isEmpty()){
-      System.out.println("METODO COM IMAGEM NOVA");
       //METODO PARA DELETAR OS OBJETOS QUE SERAO SUBSTITUIDOS PELOS NOVOS NO MIN.IO
       //SE O PRODUTO FOR ENVIADO COM NOVO NOME, NO MIN.IO VAI EXISTIR 2, O ANTIGO E O NOVO
       //POR ISSO EXCLUIR TUDO ANTES, PRA GARANTIR A INTEGRIDADE, PQ SE FOR O MSM NOME
@@ -126,8 +125,6 @@ public class ProdutoService {
 
     //EDICAO DE PRODUTO COM A MSM IMAGEM
     if(form.id() != null && form.imagem().isEmpty()){
-      System.out.println("METODO COM A MESMA IMAGEM");
-      
       //QUANDO ALTERA O NOME DO PRODUTO
       if(!form.nome().equals(produtoOriginal.getNome())){
         minioService.renameObject(produtoOriginal.getImagem(), linkImg);
