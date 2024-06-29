@@ -29,3 +29,8 @@
 label{
   font-weight: bold;
 }
+
+.error-msg{
+  color: crimson;
+  font-weight: bold;
+}

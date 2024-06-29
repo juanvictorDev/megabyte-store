@@ -15,7 +15,7 @@
   
   <div class="form-conteiner">
 
-    <form class="row" th:action="@{/salvar}" method="post" enctype="multipart/form-data">
+    <form class="row" th:action="@{/salvar}" method="post" th:object="${form}" enctype="multipart/form-data" onsubmit="submitForm()">
       
       <!-- ID -->
       <input type="hidden" name="id" th:value="${produto != null} ? ${produto.id} : null">
@@ -23,48 +23,58 @@
       <!-- NOME -->
       <div class="col-md-6">
         <label for="nome" class="form-label">Nome do Produto</label>
-        <input type = "text" id="nome" name="nome" th:value="${produto != null} ? ${produto.nome} : null"  class="form-control">
+        <input th:if="${produto != null}" type = "text" id="nome" name="nome" th:value="${produto.nome}"  class="form-control" required>
+        <input th:unless="${produto != null}" type = "text" id="nome" name="nome" th:value="${form.nome}"  class="form-control" required>
+        <p th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error-msg"/>
       </div>
+      
       
       <!-- CATEGORIA  -->
       <div class="col-md-6">
         <label for="categoria" class="form-label">Categoria do Produto</label>
-        <select  id="categoria" name="categoria" class="form-select">
+        <select  id="categoria" name="categoria" class="form-select" required>
           <option value="">...</option>
           <option th:each="categoria : ${categorias}" 
                   th:value="${categoria.id}" 
                   th:text="${categoria.nome}" 
-                  th:selected="${produto != null} and ${categoria.id} == ${produto.id_categoria}">
+                  th:selected="${produto != null} and ${categoria.id} == ${produto.id_categoria} or ${produto == null} and ${categoria.id} == ${form.categoria}">
           </option>
         </select>
+        <p th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}" class="error-msg"/>
       </div>
       
       <!-- VALOR  -->
       <div class="col-md-6">
         <label for="valor" class="form-label">Valor do Produto</label>
-        <input type="number" id="valor" name="valor" th:value="${produto != null} ? ${produto.valor} : null" class="form-control">
+        <input th:if="${produto != null}" type="number" id="valor" name="valor" th:value="${produto.valor}" class="form-control" step=".01" required>
+        <input th:unless="${produto != null}" type="number" id="valor" name="valor" th:value="${form.valor}" class="form-control" step=".01" required>
+        <p th:if="${#fields.hasErrors('valor')}" th:errors="*{valor}" class="error-msg"/>
       </div>
       
       <!-- QUANTIDADE  -->
       <div class="col-md-6">
         <label for="quantidade" class="form-label">Quantidade do Produto</label>
-        <input type="number" name="quantidade" id="quantidade" th:value="${produto != null} ? ${produto.quantidade} : null" class="form-control">
+        <input th:if="${produto != null}" type="number" name="quantidade" id="quantidade" th:value="${produto.quantidade}" class="form-control" required>
+        <input th:unless="${produto != null}" type="number" name="quantidade" id="quantidade" th:value="${form.quantidade}" class="form-control" required>
+        <p th:if="${#fields.hasErrors('quantidade')}" th:errors="*{quantidade}" class="error-msg"/>
       </div>
       
       <!-- IMAGEM  -->
       <div class="mb-3">
         <label for="imagem" class="form-label">Imagem do Produto</label>
-        <img th:if="${produto} != null" th:src="@{'http://localhost:9000/repository/' + ${produto.imagem}}" height="100px" style="display: block;" alt="imagem atual">
+        <img th:if="${produto} != null" th:src="@{'http://localhost:9000/repository/' + ${produto.imagem}}" height="100px" style="display: block;" alt="imagem atual" >
         <p th:if="${produto} != null" th:text="'atual: ' + ${produto.imagem}" style="color: dodgerblue;"></p>
-        <input type="file" name="imagem" id="imagem" class="form-control" th:required="${produto != null} ? false : true">
+        <input type="file" name="imagem" id="imagem" class="form-control" th:required="${produto != null} ? false : true" accept="image/*">
+        <p th:if="${#fields.hasErrors('imagem')}" th:errors="*{imagem}" class="error-msg"/>
       </div>
 
       <!-- DESCRICAO  -->
       <label class="form-label">Descrição</label>
-      <div id="editor" th:utext="${descricao}"></div>
-      <input type="hidden" name="descricao">
+      <div id="editor" th:utext="${produto} != null ? ${descricao} : ${form.descricao}"></div>
+      <input type="hidden" name="descricao" required>
+      <p th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}" class="error-msg"/>
 
-      <button type="submit" th:onclick="'submitForm()'" class="btn btn-primary">enviar</button>
+      <button type="submit" class="btn btn-primary">enviar</button>
     </form>
 
   </div>
@@ -99,7 +109,13 @@
 
   function submitForm() {
     let descricao = document.querySelector('input[name=descricao]');
-    descricao.value = quill.root.innerHTML;
+    let quillContent = quill.root.innerHTML;
+
+    if (quillContent === '<p><br></p>' || quillContent.match(/^<p>\s*<\/p>$/)) {
+      descricao.value = '';
+    } else {
+      descricao.value = quillContent;
+    }
   }
 </script>
 </body>

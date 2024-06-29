@@ -16,6 +16,8 @@ import com.juanvictordev.megabyte.entity.Produto;
 import com.juanvictordev.megabyte.repository.CategoriaRepository;
 import com.juanvictordev.megabyte.repository.ProdutoRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 
 @Service
 public class ProdutoService {
@@ -185,6 +187,26 @@ public class ProdutoService {
     }
 
     return dados;
+  }
+
+  //METODO PARA VALIDAR A IMAGEM ENVIADA
+  public boolean validarImagem(MultipartFile file, HttpServletRequest request){
+    String tipo = file.getContentType();
+    String referer = request.getHeader("Referer");
+    boolean rotaEditar = referer != null && referer.contains("/editar/");
+    
+    //FLUXO DE EDIÇÃO SE O USER QUISER UTILIZAR A MESMA IMAGEM
+    //NÃO PRECISA PASSAR UMA NOVA, CONSQUENTEMENTE RETORNANDO TRUE
+    //CASO FOR FLUXO DE CRIAÇÃO NÃO É POSSIVEL ENVIAR IMAGEM NULL
+    //VALIDADO NO HMTL COM REQUIRED
+    if(rotaEditar && file.isEmpty()){
+      return true;
+    }
+
+    return 
+      tipo.equals("image/png") || 
+      tipo.equals("image/jpeg") || 
+      tipo.equals("image/webp");
   }
 
 }

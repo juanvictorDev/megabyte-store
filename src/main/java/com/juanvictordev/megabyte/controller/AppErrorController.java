@@ -29,6 +29,10 @@ public class AppErrorController implements ErrorController{
         model.addAttribute("code", status);
         model.addAttribute("msg", "Resource not found");
         break;
+      case 413:
+        model.addAttribute("code", status);
+        model.addAttribute("msg", "Request Entity Too Large");
+        break;
       case 500:
         model.addAttribute("code", status);
         model.addAttribute("msg", "Internal Server Error");
@@ -40,5 +44,5 @@ public class AppErrorController implements ErrorController{
 
     return "error";
   }
-}
 
+}
