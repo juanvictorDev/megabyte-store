@@ -107,10 +107,13 @@
     }
   });  
 
+  //FUNCAO PARA ENVIAR O FORMULARIO COM O HTML DO QUILL NO INPUT HIDDEN
   function submitForm() {
     let descricao = document.querySelector('input[name=descricao]');
     let quillContent = quill.root.innerHTML;
-
+    
+    //REMOVER O VALOR PADRAO DE ENVIO DO QUILL QUANDO O ELE EH ENVIADO VAZIO
+    //PARA VALIDAR NO SPRING VALIDATION
     if (quillContent === '<p><br></p>' || quillContent.match(/^<p>\s*<\/p>$/)) {
       descricao.value = '';
     } else {
