@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long>{
   
+  //SELECT PARA TRAZER O PRODUTO COM A QUANTIDADE QUE POSSUI NO BANCO
   @Query( value = 
     "SELECT p.*, count_table.total_count as quantidade " +
     "FROM produtos p " +
@@ -27,7 +28,8 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
       nativeQuery = true
     )
   Optional<ProdutoDTO> findByIdWithCount(@Param("id") Long id);
-      
+  
+  //QUERY PARA ATUALIZAR TODOS OS PRODUTOS COM BASE NO NOME
   @Modifying
   @Transactional
   @Query(value = 
@@ -47,6 +49,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
     @Param("nomeOriginal") String nomeOriginal
   );
 
+  //QUERY PARA DELETAR "X" PRODUTOS COM O MESMO NOME 
   @Modifying
   @Transactional
   @Query(value = 

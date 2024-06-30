@@ -41,7 +41,7 @@ public class Produto {
   @JoinColumn(name = "id_categoria", nullable = false)
   Categoria categoria;
   
-  @Column(nullable = false, columnDefinition = "TEXT")
+  @Column(nullable = false)
   String descricao;
 
   //CONSTRUTOR

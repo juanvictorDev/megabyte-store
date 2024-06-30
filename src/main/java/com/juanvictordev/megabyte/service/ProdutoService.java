@@ -35,7 +35,6 @@ public class ProdutoService {
   public void criarProduto(FormDTO form){
 
     //METODO UTILITARIO PARA ENVIAR O PADRAO DE DADOS PARA O MIN.IO E RETORNAR OS LINKS
-    //  ve a questão do input hiddem lá no form
     Map<String, String> links = enviarPadraoMinio(form, null);
     
     //CRIANDO UMA LISTA E UM LOOP PARA SALVAR TODA A QUANTIDADE DE
