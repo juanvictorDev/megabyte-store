@@ -28,8 +28,8 @@ public class ProdutoController {
 
   //ROTA PARA CRIAR E EDITAR, JA QUE POSSUEM LOGICAS PARECIDAS
   //REAPROVEITAR O MESMO FORMULARIO
-  @GetMapping(value = {"/criar", "/editar/{id}"})
-  public String formulario(Model model, @PathVariable(required = false) Long id){
+  @GetMapping(value = {"/criar-produto", "/editar-produto/{id}"})
+  public String formularioProduto(Model model, @PathVariable(required = false) Long id){
     //SE O FORMULARIO POSSUI ERRO, SERA REDIRECIANADO PARA ESSE CONTROLLER
     //QUE VAI IGNORAR ESSE BLOCO SE JA POSSUIR UM FORM REDIRECIONADO DO /SALVAR
     //SE NAO, CRIAR UM NOVO PARA SERVIR DE MODELO PARA O FORM
@@ -43,8 +43,8 @@ public class ProdutoController {
   }
 
   //ROTA PARA LIDAR COM A VALIDACAO DO FORMULARIO, CRIACAO E EDICAO DO PRODUTO
-  @PostMapping("/salvar")
-  public String salvar(@Valid @ModelAttribute("form") FormDTO form, BindingResult result, RedirectAttributes redirectAttributes, HttpServletRequest request){ 
+  @PostMapping("/salvar-produto")
+  public String salvarProduto(@Valid @ModelAttribute("form") FormDTO form, BindingResult result, RedirectAttributes redirectAttributes, HttpServletRequest request){ 
     //SE IMAGEM NAO FOR DE UM TIPO MIME VALIDO, CRIAR UM NOVO ERRO 
     if(!produtoService.validarImagem(form.imagem(), request)){
       result.addError(new FieldError("form", "imagem", "selecione uma imagem válida (jpeg, png, webp)"));
@@ -54,7 +54,7 @@ public class ProdutoController {
     if(result.hasErrors()){
       redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.form", result);
       redirectAttributes.addFlashAttribute("form", form);
-      return "redirect:/" + (form.id() != null ? "editar/" + form.id() : "criar");
+      return "redirect:/" + (form.id() != null ? "editar-produto/" + form.id() : "criar-produto");
     }
 
     if(form.id() == null){
@@ -66,13 +66,4 @@ public class ProdutoController {
     return "home";
   }
 
-
-  // @GetMapping("/test")
-  // public String getMethodName(Model model) throws Exception {
-  //   Produto produto = produtoRepository.findById(30L).get();
-  //   model.addAttribute("produto", produto);
-  //   model.addAttribute("descricao", minioService.download(produto.getDescricao()));
-  //   return "test";
-  // }
-  
 }

@@ -192,7 +192,7 @@ public class ProdutoService {
   public boolean validarImagem(MultipartFile file, HttpServletRequest request){
     String tipo = file.getContentType();
     String referer = request.getHeader("Referer");
-    boolean rotaEditar = referer != null && referer.contains("/editar/");
+    boolean rotaEditar = referer != null && referer.contains("/editar-produto/");
     
     //FLUXO DE EDIÇÃO SE O USER QUISER UTILIZAR A MESMA IMAGEM
     //NÃO PRECISA PASSAR UMA NOVA, CONSQUENTEMENTE RETORNANDO TRUE
