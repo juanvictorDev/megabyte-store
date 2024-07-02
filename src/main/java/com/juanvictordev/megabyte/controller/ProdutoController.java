@@ -1,8 +1,7 @@
 package com.juanvictordev.megabyte.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.juanvictordev.megabyte.dto.FormDTO;
-import com.juanvictordev.megabyte.entity.Categoria;
 import com.juanvictordev.megabyte.repository.CategoriaRepository;
 import com.juanvictordev.megabyte.service.MinioService;
 import com.juanvictordev.megabyte.service.ProdutoService;
@@ -19,9 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
 
 
 @Controller
@@ -77,13 +73,15 @@ public class ProdutoController {
 
     return "redirect:/gerenciar-produto";
   }
-
+  
+  //ROTA PARA PAGINA DE GERENCIAR PRODUTOS, EDITAR OU EXCLUIR
   @GetMapping("/gerenciar-produto")
   public String gerenciarProduto(Model model) {
-    model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutos());
+    model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutos(PageRequest.of(0, 5)));
     return "gerenciarProduto";
   }
   
+  //ROTA PARA DELETAR PRODUTO
   @PostMapping("/deletar-produto")
   public String deletarProduto(@RequestParam String nome, @RequestParam Integer quantidade) {
     produtoService.deletarProduto(nome, quantidade);

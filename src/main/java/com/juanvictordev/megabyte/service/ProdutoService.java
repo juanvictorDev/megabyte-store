@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -106,12 +105,15 @@ public class ProdutoService {
     }
   } 
 
-
-  public Page<List<ProdutoDTO>> listarTodosProdutos(){
-    Pageable pageable = PageRequest.of(0, 5);
+  //METODO PARA TRAZER TODOS OS PRODUTOS DE FORMA PAGINADA
+  public Page<List<ProdutoDTO>> listarTodosProdutos(Pageable pageable){
     return produtoRepository.findAllWithCount(pageable);
   }
 
+  //METODO PARA DELETAR PRODUTO PELO NOME, A PARTE DA QUANTIDADE
+  //ESTA SENDO REAPROVEITADA, PORQUE USA A MESMA QUERY PARA REMOVER PRODUTOS
+  //DENTRO DO METODO DE ATUALIZAR, AQUI NO CASO SEMPRE EH PASSADO A QUANTIDADE 
+  //TOTAL CONSEQUENTEMENTE EXCLUINDO TODOS OS PRODUTOS
   public void deletarProduto(String nome, Integer quantidade){
     produtoRepository.deleteByNomeWithLimit(nome, quantidade);
   }
