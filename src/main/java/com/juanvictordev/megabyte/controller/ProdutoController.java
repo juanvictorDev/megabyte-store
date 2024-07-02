@@ -1,5 +1,7 @@
 package com.juanvictordev.megabyte.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,12 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.juanvictordev.megabyte.dto.FormDTO;
+import com.juanvictordev.megabyte.entity.Categoria;
+import com.juanvictordev.megabyte.repository.CategoriaRepository;
 import com.juanvictordev.megabyte.service.MinioService;
 import com.juanvictordev.megabyte.service.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -23,6 +30,11 @@ public class ProdutoController {
   @Autowired
   ProdutoService produtoService;
   
+  // arrumar dps
+  @Autowired
+  CategoriaRepository categoriaRepository;
+
+
   @Autowired
   MinioService minioService;
 
@@ -39,7 +51,7 @@ public class ProdutoController {
     //METODO PARA ADICIONAR OS DADOS NECESSARIOS, PARA CRIACAO OU EDICAO
     model.addAllAttributes(produtoService.dadosParaFormulario(id));
     
-    return "form";
+    return "formularioProduto";
   }
 
   //ROTA PARA LIDAR COM A VALIDACAO DO FORMULARIO, CRIACAO E EDICAO DO PRODUTO
@@ -63,7 +75,19 @@ public class ProdutoController {
       produtoService.editarProduto(form);
     }
 
-    return "home";
+    return "redirect:/gerenciar-produto";
   }
 
+  @GetMapping("/gerenciar-produto")
+  public String gerenciarProduto(Model model) {
+    model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutos());
+    return "gerenciarProduto";
+  }
+  
+  @PostMapping("/deletar-produto")
+  public String deletarProduto(@RequestParam String nome, @RequestParam Integer quantidade) {
+    produtoService.deletarProduto(nome, quantidade);
+    return "redirect:/gerenciar-produto";
+  }
+  
 }

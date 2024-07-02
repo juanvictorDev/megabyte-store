@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.juanvictordev.megabyte.dto.ProdutoDTO;
@@ -71,7 +74,7 @@ public class ProdutoService {
     int calculoQuantidade = produtoOriginal.getQuantidade() - form.quantidade();
 
     //METODO PARA ATUALIZAR OS TODOS OS PRODUTOS PELO NOME
-    produtoRepository.updateProdutoByNome(
+    produtoRepository.updateByNome(
       form.nome(),
       form.valor(),
       form.categoria(),
@@ -99,12 +102,23 @@ public class ProdutoService {
     
     //SE A QUANTIDADE FINAL FOR POSITIVA, DELETAR O RESTANTE
     }else if(calculoQuantidade > 0){
-      produtoRepository.deleteProdutoByNomeWithLimit(form.nome(), calculoQuantidade);
+      produtoRepository.deleteByNomeWithLimit(form.nome(), calculoQuantidade);
     }
   } 
 
 
-  //METODOS UTILITARIOS 
+  public Page<List<ProdutoDTO>> listarTodosProdutos(){
+    Pageable pageable = PageRequest.of(0, 5);
+    return produtoRepository.findAllWithCount(pageable);
+  }
+
+  public void deletarProduto(String nome, Integer quantidade){
+    produtoRepository.deleteByNomeWithLimit(nome, quantidade);
+  }
+
+
+
+  //--METODOS UTILITARIOS--
   
   //METODO PARA PADRONIZAR OS DADOS E ENVIAR PARA O UPLOAD DO MIN.IO E RETORNAR OS LINKS
   //POSSUI O FLUXO DE CRIACAO, QUANDO NAO EH PASSADO O PRODUTO ORIGINAL DO BANCO
