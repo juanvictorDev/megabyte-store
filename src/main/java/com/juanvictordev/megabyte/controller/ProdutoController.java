@@ -2,6 +2,7 @@ package com.juanvictordev.megabyte.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,8 +77,9 @@ public class ProdutoController {
   
   //ROTA PARA PAGINA DE GERENCIAR PRODUTOS, EDITAR OU EXCLUIR
   @GetMapping("/gerenciar-produto")
-  public String gerenciarProduto(Model model) {
-    model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutos(PageRequest.of(0, 5)));
+  public String gerenciarProduto(Model model, @RequestParam(defaultValue = "0") String page) {
+    Pageable pageable = PageRequest.of(Integer.parseInt(page), 5);
+    model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutos(pageable));
     return "gerenciarProduto";
   }
   

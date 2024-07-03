@@ -116,6 +116,8 @@ public class ProdutoService {
   //TOTAL CONSEQUENTEMENTE EXCLUINDO TODOS OS PRODUTOS
   public void deletarProduto(String nome, Integer quantidade){
     produtoRepository.deleteByNomeWithLimit(nome, quantidade);
+
+    //deletar a img e a desc no min.io
   }
 
 
