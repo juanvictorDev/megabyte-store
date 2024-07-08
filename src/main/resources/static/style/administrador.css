@@ -1,0 +1,51 @@
+.card-conteiner{
+  margin: 6% auto;
+  width: 90%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.card{
+  width: 19rem;
+  height: 28rem;
+  box-shadow: 0px 0px 15px rgb(199, 199, 199);
+  text-align: justify
+}
+
+.card{
+  transition: .5s;
+}
+
+.card:hover{
+  margin-top: -1.5rem;
+}
+
+.list-group-item, a{
+  text-decoration: none;
+  color: dodgerblue;
+  font-weight: bold;
+}
+
+.list-group-item:hover{
+  background-color: rgb(228, 228, 228);
+  transition: .3s;
+}
+
+.navbar-brand{
+  color: white;
+  text-decoration: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.navbar-brand:hover{
+  color: rgb(162, 208, 255);
+}
+
+.navbar-text{
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: white;
+}
