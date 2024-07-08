@@ -57,6 +57,8 @@
           <form th:action="@{/deletar-produto}" method="post">
             <input type="hidden" name="nome" id="nome" th:value="${produto.nome}">
             <input type="hidden" name="quantidade" id="quantidade" th:value="${produto.quantidade}">
+            <input type="hidden" name="imagem" id="imagem" th:value="${produto.imagem}">
+            <input type="hidden" name="descricao" id="descricao" th:value="${produto.descricao}">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             <input type="submit" class="btn btn-danger" value="Excluir"></input>
           </form>

@@ -114,10 +114,9 @@ public class ProdutoService {
   //ESTA SENDO REAPROVEITADA, PORQUE USA A MESMA QUERY PARA REMOVER PRODUTOS
   //DENTRO DO METODO DE ATUALIZAR, AQUI NO CASO SEMPRE EH PASSADO A QUANTIDADE 
   //TOTAL CONSEQUENTEMENTE EXCLUINDO TODOS OS PRODUTOS
-  public void deletarProduto(String nome, Integer quantidade){
+  public void deletarProduto(String nome, Integer quantidade, String imagem, String descricao){
     produtoRepository.deleteByNomeWithLimit(nome, quantidade);
-
-    //deletar a img e a desc no min.io
+    minioService.deleteDados(imagem, descricao);
   }
 
 

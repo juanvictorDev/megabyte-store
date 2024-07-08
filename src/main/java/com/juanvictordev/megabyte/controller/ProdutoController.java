@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.juanvictordev.megabyte.dto.FormDTO;
-import com.juanvictordev.megabyte.repository.CategoriaRepository;
 import com.juanvictordev.megabyte.service.MinioService;
 import com.juanvictordev.megabyte.service.ProdutoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,11 +26,6 @@ public class ProdutoController {
   @Autowired
   ProdutoService produtoService;
   
-  // arrumar dps
-  @Autowired
-  CategoriaRepository categoriaRepository;
-
-
   @Autowired
   MinioService minioService;
 
@@ -85,8 +79,13 @@ public class ProdutoController {
   
   //ROTA PARA DELETAR PRODUTO
   @PostMapping("/deletar-produto")
-  public String deletarProduto(@RequestParam String nome, @RequestParam Integer quantidade) {
-    produtoService.deletarProduto(nome, quantidade);
+  public String deletarProduto(
+    @RequestParam String nome, 
+    @RequestParam Integer quantidade, 
+    @RequestParam String imagem,
+    @RequestParam String descricao
+  ) {
+    produtoService.deletarProduto(nome, quantidade, imagem, descricao);
     return "redirect:/gerenciar-produto";
   }
   
