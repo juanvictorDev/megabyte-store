@@ -15,10 +15,12 @@ public class CategoriaService {
   @Autowired
   CategoriaRepository categoriaRepository;
   
+  //METODO PARA LISTAR TODAS AS CATEGORIAS
   public List<CategoriaDTO> listarTodasCategorias(){
     return categoriaRepository.seekAll();
   }
 
+  //METODO PARA LISTAR UMA CATEGORIA
   public CategoriaDTO listarCategoria(Integer id){
     CategoriaDTO categoria = categoriaRepository.seekById(id)
     .orElseThrow(()-> new IllegalArgumentException());
@@ -26,6 +28,7 @@ public class CategoriaService {
     return categoria;
   }
 
+  //METODO PARA SALVAR CATEGORIA NO BANCO
   public void salvarCategoria(FormCategoriaDTO form){
     if(form.id() == null){
       categoriaRepository.save(new Categoria(form.nome()));
@@ -34,7 +37,7 @@ public class CategoriaService {
     }
   }
 
-  
+  //METODO UTILITARIO PARA VALIDAR SE A CATEGORIA JA EXISTE NO BANCO
   public boolean validarCategoria(String nome){
     List<CategoriaDTO> categorias = listarTodasCategorias();
         

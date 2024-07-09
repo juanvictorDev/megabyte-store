@@ -23,13 +23,14 @@ public class CategoriaController {
   @Autowired
   CategoriaService categoriaService;
 
+  //ROTA DUPLA PARA CRIAR E EDITAR UMA CATEGORIA
   @GetMapping( value = {"/criar-categoria", "/editar-categoria/{id}"})
   public String formularioCategoria(Model model, @PathVariable(required = false) Integer id) {
     
     if(!model.containsAttribute("form")){
       model.addAttribute("form", FormCategoriaDTO.empty());
     }
-    
+
     if(id != null){
       model.addAttribute("categoria", categoriaService.listarCategoria(id));
     }
@@ -37,13 +38,17 @@ public class CategoriaController {
     return "formularioCategoria";
   }
   
+  //ROTA PARA SALVAR A CATEGORIA
   @PostMapping("/salvar-categoria")
   public String salvarCategoria(@Valid @ModelAttribute FormCategoriaDTO form, BindingResult result, RedirectAttributes redirect) {
     
+    //METODO UTILITARIO PARA VALIDADE SE O NOME DA CATEGORIA JA EXISTE NO BANCO
+    //SE EXISTIR CRIAR UM ERRO NO CAMPO
     if(!categoriaService.validarCategoria(form.nome())){
       result.addError(new FieldError("form", "nome", "categoria de produtos já existe"));
     }
 
+    //SE EXISTIR ERROS REDIRECIONAR PARA O FORMULARIO NOVAMENTE
     if(result.hasErrors()){
       redirect.addFlashAttribute("org.springframework.validation.BindingResult.form", result);
       redirect.addFlashAttribute("form", form);
@@ -55,6 +60,7 @@ public class CategoriaController {
     return "redirect:/adm/gerenciar-categoria";
   }
   
+  //ROTA PARA LISTAR TODAS AS CATEGORIAS
   @GetMapping("/gerenciar-categoria")
   public String gerenciarCategorias(Model model){
     model.addAttribute("categorias", categoriaService.listarTodasCategorias());
