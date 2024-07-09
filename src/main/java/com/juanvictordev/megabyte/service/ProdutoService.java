@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.juanvictordev.megabyte.dto.ProdutoDTO;
-import com.juanvictordev.megabyte.dto.FormDTO;
+import com.juanvictordev.megabyte.dto.FormProdutoDTO;
 import com.juanvictordev.megabyte.entity.Categoria;
 import com.juanvictordev.megabyte.entity.Produto;
 import com.juanvictordev.megabyte.repository.CategoriaRepository;
@@ -34,7 +34,7 @@ public class ProdutoService {
   MinioService minioService;
 
   //METODO PARA CRIAR PRODUTO
-  public void criarProduto(FormDTO form){
+  public void criarProduto(FormProdutoDTO form){
 
     //METODO UTILITARIO PARA ENVIAR O PADRAO DE DADOS PARA O MIN.IO E RETORNAR OS LINKS
     Map<String, String> links = enviarPadraoMinio(form, null);
@@ -60,7 +60,7 @@ public class ProdutoService {
 
 
   //METODO PARA EDITAR PRODUTO
-  public void editarProduto(FormDTO form){
+  public void editarProduto(FormProdutoDTO form){
     
     //BUSCANDO PRODUTO ORIGINAL DO BANCO
     ProdutoDTO produtoOriginal = produtoRepository.findByIdWithCount(form.id())
@@ -126,7 +126,7 @@ public class ProdutoService {
   //METODO PARA PADRONIZAR OS DADOS E ENVIAR PARA O UPLOAD DO MIN.IO E RETORNAR OS LINKS
   //POSSUI O FLUXO DE CRIACAO, QUANDO NAO EH PASSADO O PRODUTO ORIGINAL DO BANCO
   //POSSUI FLUXO DE EDICAO QUANDO EH PASSADO O PRODUTO ORIGINAL DO BANCO
-  private Map<String, String> enviarPadraoMinio(FormDTO form, ProdutoDTO produtoOriginal){
+  private Map<String, String> enviarPadraoMinio(FormProdutoDTO form, ProdutoDTO produtoOriginal){
     
     //EDICAO DE PRODUTO COM NOVA IMAGEM
     if(form.id() != null && !form.imagem().isEmpty()){
@@ -209,7 +209,7 @@ public class ProdutoService {
   public boolean validarImagem(MultipartFile file, HttpServletRequest request){
     String tipo = file.getContentType();
     String referer = request.getHeader("Referer");
-    boolean rotaEditar = referer != null && referer.contains("/editar-produto/");
+    boolean rotaEditar = referer != null && referer.contains("/adm/editar-produto/");
     
     //FLUXO DE EDIÇÃO SE O USER QUISER UTILIZAR A MESMA IMAGEM
     //NÃO PRECISA PASSAR UMA NOVA, CONSQUENTEMENTE RETORNANDO TRUE

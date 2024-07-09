@@ -15,7 +15,7 @@
   
   <div class="form-conteiner">
 
-    <form class="row" th:action="@{/salvar-produto}" method="post" th:object="${form}" enctype="multipart/form-data" onsubmit="submitForm()">
+    <form class="row" th:action="@{/adm/salvar-produto}" method="post" th:object="${form}" enctype="multipart/form-data" onsubmit="submitForm()">
       
       <!-- ID -->
       <input type="hidden" name="id" th:value="${produto != null} ? ${produto.id} : null">

@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record FormDTO(
+public record FormProdutoDTO(
   Long id, 
   
   @NotBlank
@@ -32,7 +32,7 @@ public record FormDTO(
 
 ) {
 
-  public static FormDTO empty(){
-    return new FormDTO(null, null, null, null, null, null, null);
+  public static FormProdutoDTO empty(){
+    return new FormProdutoDTO(null, null, null, null, null, null, null);
   }
 }
