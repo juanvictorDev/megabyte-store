@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.juanvictordev.megabyte.dto.ProdutoDTO;
 import com.juanvictordev.megabyte.dto.FormProdutoDTO;
+import com.juanvictordev.megabyte.dto.HomeProdutoDTO;
 import com.juanvictordev.megabyte.entity.Categoria;
 import com.juanvictordev.megabyte.entity.Produto;
 import com.juanvictordev.megabyte.repository.CategoriaRepository;
 import com.juanvictordev.megabyte.repository.ProdutoRepository;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 
@@ -119,6 +119,12 @@ public class ProdutoService {
     minioService.deleteDados(imagem, descricao);
   }
 
+  //METODO PARA LISTAR OS PRODUTOS COM FILTRADOS DINAMICAMENTE
+  public Page<List<HomeProdutoDTO>> listarTodosProdutosComFiltro(String nome, Integer categoria, Pageable pageable){
+    //VERIFICACAO SE O PRODUTO TIVER ESPACOS EM BRANCO
+    nome = nome.isBlank() ? null : nome;
+    return produtoRepository.findAllWithFilter(nome, categoria, pageable);
+  }
 
 
   //--METODOS UTILITARIOS--

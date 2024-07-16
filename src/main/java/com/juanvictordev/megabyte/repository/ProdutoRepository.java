@@ -5,17 +5,19 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import com.juanvictordev.megabyte.dto.HomeProdutoDTO;
 import com.juanvictordev.megabyte.dto.ProdutoDTO;
 import com.juanvictordev.megabyte.entity.Produto;
 import jakarta.transaction.Transactional;
 
 
 @Repository
-public interface ProdutoRepository extends JpaRepository<Produto, Long>{
+public interface ProdutoRepository extends JpaRepository<Produto, Long>, JpaSpecificationExecutor<Produto>{
   
   //SELECT PARA TRAZER O PRODUTO COM A QUANTIDADE QUE POSSUI NO BANCO
   @Query( value = 
@@ -31,7 +33,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
   Optional<ProdutoDTO> findByIdWithCount(@Param("id") Long id);
 
 
-  //QUERY PARA TRAZER TODOS OS PRODUTOS COM A SUA QUANTIDADE NO BANCO
+  //QUERY PARA TRAZER TODOS OS PRODUTOS COM A SUA QUANTIDADE NO BANCO + INFO DE CATEGORIA
   //DE FORMA PAGINADA
   @Query(value = 
   "SELECT p.*, c.nome as nome_categoria, sub.total_count as quantidade " +
@@ -44,9 +46,22 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
   ") sub ON p.nome = sub.nome AND p.id = sub.min_id",
   countQuery = "SELECT COUNT(DISTINCT nome) FROM produtos",
   nativeQuery = true
-)
-Page<List<ProdutoDTO>> findAllWithCount(Pageable pageable);
+  )
+  Page<List<ProdutoDTO>> findAllWithCount(Pageable pageable);
+  
 
+  //QUERY PARA LISTAR TODOS OS PRODUTOS FILTRADOS DINAMICAMENTE NA PAGINA HOME
+  @Query("SELECT new com.juanvictordev.megabyte.dto.HomeProdutoDTO(p.id, p.nome, p.valor, p.imagem) " +
+  "FROM Produto p " +
+  "JOIN Categoria c ON p.categoria.id = c.id " +
+  "JOIN ( " +
+    "SELECT p.nome as nome, MIN(p.id) as min_id " +
+    "FROM Produto p " +
+    "GROUP BY p.nome " +
+  ") sub ON p.nome = sub.nome AND p.id = sub.min_id " +
+  "WHERE (:nome IS NULL OR p.nome LIKE %:nome%) " +
+  "AND (:categoriaId IS NULL OR c.id = :categoriaId) " )
+  Page<List<HomeProdutoDTO>> findAllWithFilter(@Param("nome") String nome, @Param("categoriaId") Integer categoriaId, Pageable pageable);
 
   
   //QUERY PARA ATUALIZAR TODOS OS PRODUTOS COM BASE NO NOME
