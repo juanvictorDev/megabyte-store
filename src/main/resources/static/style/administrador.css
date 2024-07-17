@@ -1,5 +1,5 @@
 .card-conteiner{
-  margin: 6% auto;
+  margin: 4% auto 2% auto;
   width: 90%;
   display: flex;
   justify-content: space-around;
@@ -30,4 +30,11 @@
 .list-group-item:hover{
   background-color: rgb(228, 228, 228);
   transition: .3s;
+}
+
+.home-btn{
+  width: 7rem;
+  font-size: 1.3rem;
+  display: block;
+  margin: 0 auto;
 }

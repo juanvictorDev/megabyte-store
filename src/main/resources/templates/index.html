@@ -12,16 +12,7 @@
 <body>
 
   <!-- NAVBAR  -->
-  <nav class="navbar bg-primary">
-    <div class="container-fluid">
-      <img class="navbar-brand" th:src="@{/img/megabyte-logo.png}" alt="logo" height="80">
-      <div class="nav justify-content-end">
-        <a class="navbar-text links" href="?" >Sobre</a>
-        <a class="navbar-text links" href="?">Login</a>
-        <button class="navbar-text btn btn-danger">Carrinho🛒</button>
-      </div>
-    </div>
-  </nav>
+  <nav th:replace="~{/fragments/navHomeFrag :: navbar}"></nav>
 
   <!-- CARROSEL -->
   <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">

@@ -13,6 +13,9 @@
 </head>
 <body>
   
+  <!-- NAVBAR  -->
+  <nav th:replace="~{/fragments/navAdmFrag :: navbar}"></nav>
+
   <div class="form-conteiner">
 
     <form class="row" th:action="@{/adm/salvar-produto}" method="post" th:object="${form}" enctype="multipart/form-data" onsubmit="submitForm()">

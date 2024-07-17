@@ -11,6 +11,9 @@
 </head>
 <body>
   
+    <!-- NAVBAR  -->
+    <nav th:replace="~{/fragments/navAdmFrag :: navbar}"></nav>
+  
   <div class="form-conteiner">
 
     <form class="row" th:action="@{/adm/salvar-categoria}" method="post" th:object="${form}">
