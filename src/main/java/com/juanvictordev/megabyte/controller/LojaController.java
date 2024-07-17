@@ -30,7 +30,7 @@ public class LojaController {
   ) {
 
     model.addAttribute("categorias", categoriaService.listarTodasCategorias());
-    model.addAttribute("paginaProdutos", produtoService.listarTodosProdutosComFiltro(nome, categoria, pageable));
+    model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutosComFiltro(nome, categoria, pageable));
     return "index";
   }
 

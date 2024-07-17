@@ -52,7 +52,7 @@
 }
 
 .card-conteiner{
-  margin: 5% auto;
+  margin: 5% auto 0 auto;
   width: 90%;
   display: flex;
   justify-content: space-around;
@@ -91,4 +91,5 @@
   flex-direction: column;
   justify-content: center;
   font-weight: bold;
+  margin-bottom: 2rem;
 }
