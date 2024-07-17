@@ -98,6 +98,10 @@
       </div>
     </div>
 
+    <div th:if="${paginaProdutos.isEmpty()}" class="prod-empty">
+      <p>Nenhum Produto Encontrado 😢</p>
+      <a th:href="@{/}" class="btn btn-danger link-voltar">Voltar</a>
+    </div>
   </div>
 
 

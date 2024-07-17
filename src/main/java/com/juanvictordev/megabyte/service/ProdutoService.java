@@ -121,8 +121,6 @@ public class ProdutoService {
 
   //METODO PARA LISTAR OS PRODUTOS COM FILTRADOS DINAMICAMENTE
   public Page<List<HomeProdutoDTO>> listarTodosProdutosComFiltro(String nome, Integer categoria, Pageable pageable){
-    //VERIFICACAO SE O PRODUTO TIVER ESPACOS EM BRANCO
-    nome = nome.isBlank() ? null : nome;
     return produtoRepository.findAllWithFilter(nome, categoria, pageable);
   }
 

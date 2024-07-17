@@ -85,3 +85,10 @@
 .link-prod{
   width: 60%;
 }
+
+.prod-empty{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+}
