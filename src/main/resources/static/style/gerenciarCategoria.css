@@ -3,3 +3,12 @@
   max-width: 100%;
   margin: 5% auto;
 }
+
+.prod-empty{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}

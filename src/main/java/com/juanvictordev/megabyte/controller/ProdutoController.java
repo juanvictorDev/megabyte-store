@@ -76,9 +76,6 @@ public class ProdutoController {
   public String gerenciarProduto(Model model, @RequestParam(defaultValue = "0") String page) {
     Pageable pageable = PageRequest.of(Integer.parseInt(page), 5);
     model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutos(pageable));
-    // -----------------testar vazio----------------------
-    // Page<List<ProdutoDTO>> teste = new PageImpl<>(new ArrayList<>());
-    // model.addAttribute("paginaDeProdutos", teste);
     return "gerenciarProduto";
   }
   

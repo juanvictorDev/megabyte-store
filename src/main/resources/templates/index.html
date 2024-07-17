@@ -95,6 +95,10 @@
     </div>
   </div>
 
+  <div th:if="${paginaDeProdutos.isEmpty()}" class="prod-empty">
+    <p>Nenhum Produto Encontrado 😢</p>
+    <a th:href="@{/adm}" class="btn btn-danger link-voltar">Voltar</a>
+  </div>
 
   <!-- PAGINAÇAO -->
   <div class="pagination-container" th:if="${!paginaDeProdutos.isEmpty()}">
