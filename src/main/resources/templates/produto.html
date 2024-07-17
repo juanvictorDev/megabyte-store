@@ -25,7 +25,7 @@
           <button type="button" class="btn btn-primary descricao" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Descrição
           </button>
-          <button type="button" class="btn btn-danger">
+          <button type="button" class="btn btn-danger" id="liveToastBtn">
             Comprar 🛒
           </button>
         </div>
@@ -47,8 +47,32 @@
     </div>
   </div>
 
+  <!-- AVISO DE COMPRA -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">✅ Megabyte</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Produto comprado com sucesso.
+      </div>
+    </div>
+  </div>
+
 
   <!-- bootstrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    const toastTrigger = document.getElementById('liveToastBtn')
+    const toastLiveExample = document.getElementById('liveToast')
+
+    if (toastTrigger) {
+      const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+      toastTrigger.addEventListener('click', () => {
+        toastBootstrap.show()
+      })
+    }
+  </script>
 </body>
 </html>

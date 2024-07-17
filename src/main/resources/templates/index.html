@@ -89,7 +89,7 @@
     
     <div class="card" th:each=" produto : ${paginaDeProdutos.getContent()} ">
       <div class="img-container">
-        <img th:src="@{'http://localhost:9000/repository/' + ${produto.imagem}}" class="card-img-top" alt="imagem do produto">
+        <img th:src="@{'http://localhost:9000/repository/' + ${produto.imagem}}" alt="imagem do produto">
       </div>
       <div class="card-body">
         <h5 class="card-title" th:text="${produto.nome}"></h5>
