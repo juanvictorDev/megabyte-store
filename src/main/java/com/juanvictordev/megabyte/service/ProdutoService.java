@@ -124,6 +124,14 @@ public class ProdutoService {
     return produtoRepository.findAllWithFilter(nome, categoria, pageable);
   }
 
+  //METODO PARA LISTAR APENAS UM PRODUTO ESPECIFICO PELO ID
+  public ProdutoDTO listarProduto(Long id){
+    ProdutoDTO produto = produtoRepository.findByIdWithCount(id)
+    .orElseThrow(() -> new IllegalArgumentException());
+    
+    return produto;
+  }
+
 
   //--METODOS UTILITARIOS--
   

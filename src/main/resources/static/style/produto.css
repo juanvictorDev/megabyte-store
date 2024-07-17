@@ -1,0 +1,40 @@
+body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.produto{
+  width: 50rem;
+  text-align: center;
+  border-radius: 2rem;
+  box-shadow: 0 0 20px rgb(193, 193, 193);
+}
+
+.img-produto{
+  height: 100%;
+}
+
+.nome{
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.preco{
+  margin-top: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: crimson;
+}
+
+.quantidade{
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+}
+
+.card-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
