@@ -51,3 +51,16 @@
   align-items: center;
   justify-content: center;
 }
+
+.modal-body{
+  text-align: center;
+  width: 100%;
+}
+
+.modal-body p{
+  overflow-wrap: break-word;
+}
+
+.modal-body img{
+  max-width: 100%;
+}
