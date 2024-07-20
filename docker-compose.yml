@@ -1,0 +1,43 @@
+networks:
+  my_net:
+volumes:
+  my_db:
+  my_bucket:
+
+services:
+  megabyte:
+    build: .
+    container_name: megabyte
+    ports:
+      - "8080:8080"
+    networks:
+      - my_net
+    depends_on:
+      - mysql
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=megabyte-adm-999
+    networks:
+      - my_net
+    volumes:
+      - "my_bucket:/data"
+    command: server /data --console-address ":9001"
+
+  mysql:
+    image: mysql:8.0-debian
+    container_name: mysql_db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+    networks:
+      - my_net
+    volumes:
+      - "my_db:/var/lib/mysql"

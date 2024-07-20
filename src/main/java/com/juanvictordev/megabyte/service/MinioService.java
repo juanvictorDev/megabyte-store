@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import io.minio.CopyObjectArgs;
 import io.minio.CopySource;
@@ -19,12 +20,24 @@ import io.minio.messages.DeleteObject;
 @Service
 public class MinioService {
 
-  //--usar variavel de ambiente pra setar as coisas
+  @Value("${minio.username}") 
+  private String username;
+
+  @Value("${minio.password}")
+  private String password;
+
+  @Value("${minio.endpoint}")
+  private String endpoint;
+
+  @Value("${minio.bucket.name}")
+  private String bucketName;
+
+  
   private MinioClient getMinioClient(){
     MinioClient minioClient = MinioClient
     .builder()
-    .endpoint("http://127.0.0.1:9000")
-    .credentials("minioadmin", "minioadmin")
+    .endpoint(this.endpoint)
+    .credentials(this.username, this.password)
     .build();
 
     return minioClient;
@@ -35,7 +48,7 @@ public class MinioService {
     try (BufferedInputStream input = new BufferedInputStream(inputStream)) {  
       getMinioClient().putObject(PutObjectArgs
       .builder()
-      .bucket("repository")
+      .bucket(this.bucketName)
       .object(objectName)
       .stream(input, objectSize, -1)
       .build());
@@ -50,10 +63,10 @@ public class MinioService {
     MinioClient minioClient = getMinioClient();
     try {
       minioClient.copyObject(CopyObjectArgs.builder()
-      .bucket("repository")
+      .bucket(this.bucketName)
       .object(novoObjetoNome)
       .source(CopySource.builder()
-        .bucket("repository")
+        .bucket(this.bucketName)
         .object(objetoNome)
         .build())
       .build());
@@ -69,7 +82,7 @@ public class MinioService {
     try (
       InputStream obj = getMinioClient().getObject(GetObjectArgs
       .builder()
-      .bucket("repository")
+      .bucket(this.bucketName)
       .object(descricao)
       .build())
     ) {
@@ -92,7 +105,7 @@ public class MinioService {
     try {
       Iterable<Result<DeleteError>> results = getMinioClient().removeObjects(RemoveObjectsArgs
       .builder()
-      .bucket("repository")
+      .bucket(this.bucketName)
       .objects(objects)
       .build());
 

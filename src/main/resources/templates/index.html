@@ -12,7 +12,20 @@
 <body>
 
   <!-- NAVBAR  -->
-  <nav th:replace="~{/fragments/navHomeFrag :: navbar}"></nav>
+  <nav class="navbar bg-primary" >
+    <div class="container-fluid">
+      <a th:href="@{/}">
+        <img class="navbar-brand" th:src="@{/img/megabyte-logo.png}" alt="logo" height="80">
+      </a>
+      <div class="nav justify-content-end">
+        <a class="navbar-text links" href="?" >Sobre</a>
+        <a class="navbar-text links" href="?">Login</a>
+        <a class="navbar-text links" th:href="@{/adm}">Adm</a>
+        <button class="navbar-text btn btn-danger">Carrinho🛒</button>
+      </div>
+    </div>
+  </nav>
+
 
   <!-- CARROSEL -->
   <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
@@ -80,7 +93,7 @@
     
     <div class="card" th:each=" produto : ${paginaDeProdutos.getContent()} ">
       <div class="img-container">
-        <img th:src="@{'http://localhost:9000/repository/' + ${produto.imagem}}" alt="imagem do produto">
+        <img th:src="@{${endpoint} + ${produto.imagem}}" alt="imagem do produto">
       </div>
       <div class="card-body">
         <h5 class="card-title" th:text="${produto.nome}"></h5>
@@ -93,11 +106,6 @@
       <p>Nenhum Produto Encontrado 😢</p>
       <a th:href="@{/}" class="btn btn-danger link-voltar">Voltar</a>
     </div>
-  </div>
-
-  <div th:if="${paginaDeProdutos.isEmpty()}" class="prod-empty">
-    <p>Nenhum Produto Encontrado 😢</p>
-    <a th:href="@{/adm}" class="btn btn-danger link-voltar">Voltar</a>
   </div>
 
   <!-- PAGINAÇAO -->

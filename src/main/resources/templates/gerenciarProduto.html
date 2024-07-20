@@ -12,7 +12,13 @@
 <body>
   
   <!-- NAVBAR  -->
-  <nav th:replace="~{/fragments/navAdmFrag :: navbar}"></nav>
+  <nav class="navbar bg-dark">
+    <div class="container-fluid justify-content-center">
+      <a th:href="@{/adm}">
+        <img class="navbar-brand" th:src="@{/img/painel-administrativo-logo.png}" alt="logo" height="80">
+      </a>
+    </div>
+  </nav>
 
   <!-- TABELA DE PRODUTOS -->
   <table class="table table-striped table-hover">
@@ -29,7 +35,7 @@
     <tbody>
       <tr th:each=" produto : ${paginaDeProdutos.getContent()} " class="align-middle" style="font-size: large;">
         <td>
-          <img height="70" th:src="@{'http://localhost:9000/repository/' + ${produto.imagem}}" alt="imagem do produto" style="border: 1px solid black;">
+          <img height="70" th:src="@{ ${endpoint} + ${produto.imagem}}" alt="imagem do produto" style="border: 1px solid black;">
         </td>
         <td th:text="${produto.nome}"></td>
         <td th:text="${produto.nome_categoria}"></td>
@@ -70,7 +76,7 @@
       </div>
     </div>
   </div>
-
+  <br>
   <div th:if="${paginaDeProdutos.isEmpty()}" class="prod-empty">
     <p>Nenhum Produto Encontrado 😢</p>
     <a th:href="@{/adm}" class="btn btn-danger link-voltar">Voltar</a>

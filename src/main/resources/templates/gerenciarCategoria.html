@@ -12,7 +12,13 @@
 <body>
   
   <!-- NAVBAR  -->
-  <nav th:replace="~{/fragments/navAdmFrag :: navbar}"></nav>
+  <nav class="navbar bg-dark">
+    <div class="container-fluid justify-content-center">
+      <a th:href="@{/adm}">
+        <img class="navbar-brand" th:src="@{/img/painel-administrativo-logo.png}" alt="logo" height="80">
+      </a>
+    </div>
+  </nav>
 
   <!-- TABELA DE CATEGORIAS  -->
   <table class="table table-striped table-hover">

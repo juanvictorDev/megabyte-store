@@ -1,6 +1,7 @@
 package com.juanvictordev.megabyte.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ public class LojaController {
   @Autowired
   MinioService minioService;
 
+  @Value("${minio.bucket.endpoint}")
+  String endpoint;
+
   //ROTA PRINCIPAL PARA LISTAR OS PRODUTOS NA HOME COM FILTRAGEM DINAMICA OPCIONAL
   @GetMapping("/")
   public String paginaPrincipal(
@@ -37,15 +41,17 @@ public class LojaController {
 
     model.addAttribute("categorias", categoriaService.listarTodasCategorias());
     model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutosComFiltro(nome, categoria, pageable));
+    model.addAttribute("endpoint", this.endpoint);
     return "index";
   }
-
+  
   //ROTA ESPECIFICA PARA PRODUTO
   @GetMapping("/produto/{id}")
   public String getMethodName(@PathVariable Long id, Model model) {
     ProdutoDTO produto = produtoService.listarProduto(id);
     model.addAttribute("produto", produto);
     model.addAttribute("descricao", minioService.downloadDescricao(produto.getDescricao()));
+    model.addAttribute("endpoint", this.endpoint);
     return "produto";
   }
   

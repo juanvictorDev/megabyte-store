@@ -12,13 +12,25 @@
 <body>
 
   <!-- NAVBAR  -->
-  <nav th:replace="~{/fragments/navHomeFrag :: navbar}"></nav>
+  <nav class="navbar bg-primary">
+    <div class="container-fluid">
+      <a th:href="@{/}">
+        <img class="navbar-brand" th:src="@{/img/megabyte-logo.png}" alt="logo" height="80">
+      </a>
+      <div class="nav justify-content-end">
+        <a class="navbar-text links" href="?" >Sobre</a>
+        <a class="navbar-text links" href="?">Login</a>
+        <a class="navbar-text links" th:href="@{/adm}">Adm</a>
+        <button class="navbar-text btn btn-danger">Carrinho🛒</button>
+      </div>
+    </div>
+  </nav>
 
   <!-- PRODUTO  -->
   <div class="card mb-3 produto">
     <div class="row g-0">
       <div class="col-md-4">
-        <img th:src="@{'http://localhost:9000/repository/' + ${produto.imagem}}" class="img-fluid rounded-start img-produto" alt="imagem do produto">
+        <img th:src="@{${endpoint} + ${produto.imagem}}" class="img-fluid rounded-start img-produto" alt="imagem do produto">
       </div>
       <div class="col-md-8 card-container">
         <div class="card-body">

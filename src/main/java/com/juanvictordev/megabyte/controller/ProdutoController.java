@@ -1,6 +1,7 @@
 package com.juanvictordev.megabyte.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,9 @@ public class ProdutoController {
   
   @Autowired
   MinioService minioService;
+
+  @Value("${minio.bucket.endpoint}")
+  String endpoint;
 
   //ROTA PARA CRIAR E EDITAR, JA QUE POSSUEM LOGICAS PARECIDAS
   //REAPROVEITAR O MESMO FORMULARIO
@@ -76,6 +80,7 @@ public class ProdutoController {
   public String gerenciarProduto(Model model, @RequestParam(defaultValue = "0") String page) {
     Pageable pageable = PageRequest.of(Integer.parseInt(page), 5);
     model.addAttribute("paginaDeProdutos", produtoService.listarTodosProdutos(pageable));
+    model.addAttribute("endpoint", endpoint);
     return "gerenciarProduto";
   }
   
