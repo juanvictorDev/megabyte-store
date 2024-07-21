@@ -35,7 +35,7 @@
     <tbody>
       <tr th:each=" produto : ${paginaDeProdutos.getContent()} " class="align-middle" style="font-size: large;">
         <td>
-          <img height="70" th:src="@{ ${endpoint} + ${produto.imagem}}" alt="imagem do produto" style="border: 1px solid black;">
+          <img height="70" th:src="${endpoint + produto.imagem}" alt="imagem do produto" style="border: 1px solid black;">
         </td>
         <td th:text="${produto.nome}"></td>
         <td th:text="${produto.nome_categoria}"></td>

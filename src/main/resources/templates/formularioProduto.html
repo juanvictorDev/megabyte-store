@@ -71,7 +71,7 @@
       <!-- IMAGEM  -->
       <div class="mb-3">
         <label for="imagem" class="form-label">Imagem do Produto</label>
-        <img th:if="${produto} != null" th:src="@{${endpoint} + ${produto.imagem}}" height="100px" style="display: block;" alt="imagem atual" >
+        <img th:if="${produto} != null" th:src="${endpoint + produto.imagem}" height="100px" style="display: block;" alt="imagem atual" >
         <p th:if="${produto} != null" th:text="'atual: ' + ${produto.imagem}" style="color: dodgerblue;"></p>
         <input type="file" name="imagem" id="imagem" class="form-control" th:required="${produto != null} ? false : true" accept="image/*">
         <p th:if="${#fields.hasErrors('imagem')}" th:errors="*{imagem}" class="error-msg"/>

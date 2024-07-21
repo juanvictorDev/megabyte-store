@@ -30,7 +30,7 @@
   <div class="card mb-3 produto">
     <div class="row g-0">
       <div class="col-md-4">
-        <img th:src="@{${endpoint} + ${produto.imagem}}" class="img-fluid rounded-start img-produto" alt="imagem do produto">
+        <img th:src="${endpoint + produto.imagem}" class="img-fluid rounded-start img-produto" alt="imagem do produto">
       </div>
       <div class="col-md-8 card-container">
         <div class="card-body">
